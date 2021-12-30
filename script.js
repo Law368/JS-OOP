@@ -1,9 +1,7 @@
-// const prompt = require('prompt');
 const readlineSync = require('readline-sync');
 
-// create Initial class
 const initial = {
-  tries: 2,
+  tries: 3,
   generatedNumber: '',
   createRandomNumber() {
     const randomNumber = String(Math.floor(Math.random() * 10));
@@ -12,25 +10,12 @@ const initial = {
     return randomNumber;
   },
   resetTries() {
-    this.tries = 2;
-    console.log(this.tries);
+    this.tries = 3;
   },
 };
-// create PlayerGuess
 const playerGuess = {
-  // promptQuestion: 'Please enter a random number from 0 to 10:',
   userAnswer: '',
   comparisonResult: '',
-  // userPrompt() {
-  //   prompt.start();
-
-  //   prompt.get(this.promptQuestion, (err, result) => {
-  //     this.userAnswer = result[this.promptQuestion];
-  //     console.log(`The user input is ${this.userAnswer}`);
-  //     this.executeComparison(this.userAnswer);
-  //     this.comparisonResult;
-  //   });
-  // },
   userPrompt() {
     const input = readlineSync.question(
       'Please enter a random number from 0 to 10: '
@@ -38,7 +23,6 @@ const playerGuess = {
     this.userAnswer = input;
     console.log(`2. User input was ${this.userAnswer}`);
     this.executeComparison(this.userAnswer);
-    // this.executeComparison(this.userAnswer);
   },
   executeComparison(answer) {
     console.log(`3. the type of GenNum is : ${typeof this.generatedNumber}`);
@@ -62,10 +46,19 @@ const playerGuess = {
     }
   },
   endPrompt() {
-    console.log('Do you want to end the game or restart?');
+    if (readlineSync.keyInYN('Do you want to restart the game?')) {
+      this.resetTries();
+      this.createRandomNumber();
+      this.userPrompt();
+      // eslint-disable-next-line no-use-before-define
+      if (this === playerGuessedRight) {
+        this.advance();
+      } else {
+        this.isNumBiggerOrSmaller();
+      }
+    }
   },
 };
-// create PlayerGuessedWrong
 const playerGuessedWrong = {
   isNumBiggerOrSmaller() {
     if (this.userAnswer > this.generatedNumber) {
@@ -90,33 +83,27 @@ const playerGuessedWrong = {
     this.checkAmountOfTriesLeft();
   },
   checkAmountOfTriesLeft() {
-    while (this.tries > 0) {
+    if (this.tries > 0) {
       this.userPrompt();
       console.log(`TRIES IN CHECK AMOUNT: ${this.tries}`);
       this.isNumBiggerOrSmaller();
-    }
-    if (this.tries === 0) {
+    } else {
       console.log('8. The amount of tries has reached 0');
       this.playerLost();
-      this.endPrompt();
     }
   },
   playerLost() {
-    console.log(`=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=
-    The game is Over. You lost!
-    =/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`);
+    console.log(
+      `=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`
+    );
     this.endPrompt();
-    // this.isNumBiggerOrSmaller();
   },
 };
 
-// create playerGuessedRight
 const playerGuessedRight = {
   playerWon() {
     console.log(
-      `=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=
-      You have won! Congratulations!
-=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`
+      `=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`
     );
     this.endPrompt();
   },
@@ -129,6 +116,3 @@ initial.createRandomNumber();
 playerGuess.userPrompt();
 playerGuessedRight.advance();
 playerGuessedWrong.isNumBiggerOrSmaller();
-// playerGuessedWrong.advance();
-// playerGuessedWrong.executeComparison(this.userAnswer);
-// Prompt, Comparison, More or Less, Won or Lost, Conclusion
