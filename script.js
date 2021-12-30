@@ -12,6 +12,16 @@ const initial = {
   resetTries() {
     this.tries = 3;
   },
+  log(message) {
+    console.log(message);
+  },
+  messages: [
+    'Your number is too big!',
+    'Your number is too small!',
+    '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=',
+    '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=',
+    'Do you want to restart the game?',
+  ],
 };
 const playerGuess = {
   userAnswer: '',
@@ -46,7 +56,7 @@ const playerGuess = {
     }
   },
   endPrompt() {
-    if (readlineSync.keyInYN('Do you want to restart the game?')) {
+    if (readlineSync.keyInYN(this.messages[4])) {
       this.resetTries();
       this.createRandomNumber();
       this.userPrompt();
@@ -62,20 +72,14 @@ const playerGuess = {
 const playerGuessedWrong = {
   isNumBiggerOrSmaller() {
     if (this.userAnswer > this.generatedNumber) {
-      this.numIsBigger();
+      this.log(this.messages[0]);
     }
     if (this.userAnswer < this.generatedNumber) {
-      this.numIsSmaller();
+      this.log(this.messages[1]);
     }
     if (this.tries > 0) {
       this.decrementTries();
     }
-  },
-  numIsSmaller() {
-    console.log('Your number is too small!');
-  },
-  numIsBigger() {
-    console.log('Your number is too big!');
   },
   decrementTries() {
     this.tries -= 1;
@@ -93,18 +97,14 @@ const playerGuessedWrong = {
     }
   },
   playerLost() {
-    console.log(
-      `=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`
-    );
+    this.log(this.messages[2]);
     this.endPrompt();
   },
 };
 
 const playerGuessedRight = {
   playerWon() {
-    console.log(
-      `=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=`
-    );
+    this.log(this.messages[3]);
     this.endPrompt();
   },
 };
