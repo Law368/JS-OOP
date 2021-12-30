@@ -15,13 +15,11 @@ const initial = {
   log(message) {
     console.log(message);
   },
-  messages: [
-    'Your number is too big!',
-    'Your number is too small!',
-    '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=',
-    '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=',
-    'Do you want to restart the game?',
-  ],
+  messages: {
+    numTooBig: 'Your number is too big!',
+    numTooSmall: 'Your number is too small!',
+    resetQuestion: 'Do you want to restart the game?',
+  },
 };
 const playerGuess = {
   userAnswer: '',
@@ -55,27 +53,34 @@ const playerGuess = {
       this.playerWon();
     }
   },
-  endPrompt() {
-    if (readlineSync.keyInYN(this.messages[4])) {
+  endPrompt(object) {
+    if (readlineSync.keyInYN(this.messages.resetQuestion)) {
       this.resetTries();
       this.createRandomNumber();
       this.userPrompt();
       // eslint-disable-next-line no-use-before-define
-      if (this === playerGuessedRight) {
+      if (object === playerGuessedRight) {
         this.advance();
-      } else {
-        this.isNumBiggerOrSmaller();
       }
+      this.isNumBiggerOrSmaller();
+    } else {
+      this.tries = 0;
     }
+
+    // if (this === playerGuessedRight) {
+    // } else {
+    //   this.isNumBiggerOrSmaller();
+    // }
   },
 };
 const playerGuessedWrong = {
   isNumBiggerOrSmaller() {
     if (this.userAnswer > this.generatedNumber) {
-      this.log(this.messages[0]);
-    }
-    if (this.userAnswer < this.generatedNumber) {
-      this.log(this.messages[1]);
+      this.log(this.messages.numTooBig);
+    } else if (this.userAnswer < this.generatedNumber) {
+      this.log(this.messages.numTooSmall);
+    } else if (this.userAnswer === this.generatedNumber) {
+      return;
     }
     if (this.tries > 0) {
       this.decrementTries();
@@ -97,15 +102,19 @@ const playerGuessedWrong = {
     }
   },
   playerLost() {
-    this.log(this.messages[2]);
-    this.endPrompt();
+    this.log(
+      '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/='
+    );
+    this.endPrompt(playerGuessedWrong);
   },
 };
 
 const playerGuessedRight = {
   playerWon() {
-    this.log(this.messages[3]);
-    this.endPrompt();
+    this.log(
+      '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/='
+    );
+    this.endPrompt(playerGuessedRight);
   },
 };
 
