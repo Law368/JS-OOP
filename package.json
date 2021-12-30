@@ -8,6 +8,7 @@
     "prettier": "^2.5.1"
   },
   "dependencies": {
-    "prompt": "^1.2.0"
+    "prompt": "^1.2.0",
+    "readline-sync": "^1.4.10"
   }
 }
