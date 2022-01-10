@@ -53,34 +53,26 @@ const playerGuess = {
       this.playerWon();
     }
   },
-  endPrompt(object) {
+  endPrompt() {
     if (readlineSync.keyInYN(this.messages.resetQuestion)) {
       this.resetTries();
       this.createRandomNumber();
       this.userPrompt();
-      // eslint-disable-next-line no-use-before-define
-      if (object === playerGuessedRight) {
-        this.advance();
-      }
+      this.advance();
       this.isNumBiggerOrSmaller();
     } else {
       this.tries = 0;
     }
-
-    // if (this === playerGuessedRight) {
-    // } else {
-    //   this.isNumBiggerOrSmaller();
-    // }
   },
 };
-const playerGuessedWrong = {
+const gameState = {
   isNumBiggerOrSmaller() {
     if (this.userAnswer > this.generatedNumber) {
       this.log(this.messages.numTooBig);
-    } else if (this.userAnswer < this.generatedNumber) {
-      this.log(this.messages.numTooSmall);
     } else if (this.userAnswer === this.generatedNumber) {
       return;
+    } else if (this.userAnswer < this.generatedNumber) {
+      this.log(this.messages.numTooSmall);
     }
     if (this.tries > 0) {
       this.decrementTries();
@@ -105,23 +97,19 @@ const playerGuessedWrong = {
     this.log(
       '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nThe game is Over. You lost!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/='
     );
-    this.endPrompt(playerGuessedWrong);
+    this.endPrompt();
   },
-};
-
-const playerGuessedRight = {
   playerWon() {
     this.log(
       '=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=\nYou have won! Congratulations!\n=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/='
     );
-    this.endPrompt(playerGuessedRight);
+    this.endPrompt();
   },
 };
 
 Object.setPrototypeOf(playerGuess, initial);
-Object.setPrototypeOf(playerGuessedWrong, playerGuess);
-Object.setPrototypeOf(playerGuessedRight, playerGuess);
+Object.setPrototypeOf(gameState, playerGuess);
 initial.createRandomNumber();
 playerGuess.userPrompt();
-playerGuessedRight.advance();
-playerGuessedWrong.isNumBiggerOrSmaller();
+gameState.advance();
+gameState.isNumBiggerOrSmaller();
