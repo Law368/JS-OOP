@@ -30,6 +30,9 @@ const playerGuess = {
     );
     this.userAnswer = input;
     console.log(`2. User input was ${this.userAnswer}`);
+    this.userAnswer = Math.floor(this.userAnswer);
+    console.log(`ROUNDED UP USER ANSWER IS ${this.userAnswer}`);
+    this.userAnswer = String(this.userAnswer);
     this.executeComparison(this.userAnswer);
   },
   executeComparison(answer) {
@@ -44,7 +47,7 @@ const playerGuess = {
       this.comparisonResult = false;
     }
   },
-  advance() {
+  checkAnswer() {
     console.log(
       `6. the type of comparison result: ${typeof this.comparisonResult}`
     );
@@ -58,14 +61,24 @@ const playerGuess = {
       this.resetTries();
       this.createRandomNumber();
       this.userPrompt();
-      this.advance();
-      this.isNumBiggerOrSmaller();
+      if (this.checkIfNumber() === true) {
+        this.checkAnswer();
+        this.isNumBiggerOrSmaller();
+      }
     } else {
       this.tries = 0;
     }
   },
 };
 const gameState = {
+  regex: /\d/,
+  checkIfNumber() {
+    if (this.regex.test(this.userAnswer)) {
+      return true;
+    }
+    this.log('Must input only numbers!');
+    return false;
+  },
   isNumBiggerOrSmaller() {
     if (this.userAnswer > this.generatedNumber) {
       this.log(this.messages.numTooBig);
@@ -74,7 +87,7 @@ const gameState = {
     } else if (this.userAnswer < this.generatedNumber) {
       this.log(this.messages.numTooSmall);
     }
-    if (this.tries > 0) {
+    if (this.checkIfNumber() === true && this.tries > 0) {
       this.decrementTries();
     }
   },
@@ -86,8 +99,11 @@ const gameState = {
   checkAmountOfTriesLeft() {
     if (this.tries > 0) {
       this.userPrompt();
-      console.log(`TRIES IN CHECK AMOUNT: ${this.tries}`);
-      this.isNumBiggerOrSmaller();
+      if (this.checkIfNumber() === true) {
+        this.checkAnswer();
+        console.log(`TRIES IN CHECK AMOUNT: ${this.tries}`);
+        this.isNumBiggerOrSmaller();
+      }
     } else {
       console.log('8. The amount of tries has reached 0');
       this.playerLost();
@@ -111,5 +127,19 @@ Object.setPrototypeOf(playerGuess, initial);
 Object.setPrototypeOf(gameState, playerGuess);
 initial.createRandomNumber();
 playerGuess.userPrompt();
-gameState.advance();
-gameState.isNumBiggerOrSmaller();
+if (gameState.checkIfNumber() === true) {
+  gameState.checkAnswer();
+  gameState.isNumBiggerOrSmaller();
+}
+
+// class playerGuess {
+
+//   constructor(tries, resetTries, generatedNumber, createRandomNumber, log) {
+//     this.tries = tries;
+//     this.resetTries = resetTries;
+//     this.generatedNumber = generatedNumber;
+//     this.createRandomNumber =  createRandomNumber;
+//     this.log = log;
+//   }
+
+// }
