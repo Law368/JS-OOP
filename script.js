@@ -13,7 +13,6 @@ class Initial {
   createRandomNumber() {
     const randomNumber = String(Math.floor(Math.random() * 10));
     this.generatedNumber = randomNumber;
-    console.log(`1. Random number is ${randomNumber}`);
     return randomNumber;
   }
   resetTries() {
@@ -36,18 +35,11 @@ const playerGuess = {
       'Please enter a random number from 0 to 10: '
     );
     this.userAnswer = input;
-    console.log(`2. User input was ${this.userAnswer}`);
     this.userAnswer = Math.floor(this.userAnswer);
-    console.log(`ROUNDED UP USER ANSWER IS ${this.userAnswer}`);
     this.userAnswer = String(this.userAnswer);
     this.executeComparison(this.userAnswer);
   },
   executeComparison(answer) {
-    console.log(`3. the type of GenNum is : ${typeof this.generatedNumber}`);
-    console.log(`4. the type of answer is : ${typeof answer}`);
-    console.log(
-      `5. if Answer is equal to GenNum: ${answer === this.generatedNumber}`
-    );
     if (answer === this.generatedNumber) {
       this.comparisonResult = true;
     } else {
@@ -55,10 +47,6 @@ const playerGuess = {
     }
   },
   checkAnswer() {
-    console.log(
-      `6. the type of comparison result: ${typeof this.comparisonResult}`
-    );
-    console.log(`7. Comparison results : ${this.comparisonResult}`);
     if (this.comparisonResult === true) {
       this.playerWon();
     }
@@ -108,11 +96,9 @@ const gameState = {
       this.userPrompt();
       if (this.checkIfNumber() === true) {
         this.checkAnswer();
-        console.log(`TRIES IN CHECK AMOUNT: ${this.tries}`);
         this.isNumBiggerOrSmaller();
       }
     } else {
-      console.log('8. The amount of tries has reached 0');
       this.playerLost();
     }
   },
@@ -138,15 +124,3 @@ if (gameState.checkIfNumber() === true) {
   gameState.checkAnswer();
   gameState.isNumBiggerOrSmaller();
 }
-
-// class playerGuess {
-
-//   constructor(tries, resetTries, generatedNumber, createRandomNumber, log) {
-//     this.tries = tries;
-//     this.resetTries = resetTries;
-//     this.generatedNumber = generatedNumber;
-//     this.createRandomNumber =  createRandomNumber;
-//     this.log = log;
-//   }
-
-// }
