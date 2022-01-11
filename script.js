@@ -1,26 +1,33 @@
+/* eslint-disable*/
 const readlineSync = require('readline-sync');
 
-const initial = {
-  tries: 3,
-  generatedNumber: '',
+class Tries {
+  tries = 3;
+}
+
+class Initial {
+  constructor(tries) {
+    this.tries = tries.tries;
+  }
+  generatedNumber = '';
   createRandomNumber() {
     const randomNumber = String(Math.floor(Math.random() * 10));
     this.generatedNumber = randomNumber;
     console.log(`1. Random number is ${randomNumber}`);
     return randomNumber;
-  },
+  }
   resetTries() {
     this.tries = 3;
-  },
+  }
   log(message) {
     console.log(message);
-  },
-  messages: {
+  }
+  messages = {
     numTooBig: 'Your number is too big!',
     numTooSmall: 'Your number is too small!',
     resetQuestion: 'Do you want to restart the game?',
-  },
-};
+  };
+}
 const playerGuess = {
   userAnswer: '',
   comparisonResult: '',
@@ -122,7 +129,7 @@ const gameState = {
     this.endPrompt();
   },
 };
-
+const initial = new Initial(new Tries());
 Object.setPrototypeOf(playerGuess, initial);
 Object.setPrototypeOf(gameState, playerGuess);
 initial.createRandomNumber();
