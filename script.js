@@ -2,12 +2,12 @@
 const readlineSync = require('readline-sync');
 
 class Tries {
-  tries = 3;
+  triesLeft = 3;
 }
 
 class Initial {
-  constructor(tries) {
-    this.tries = tries.tries;
+  constructor(triesAmount) {
+    this.tries = triesAmount.triesLeft;
   }
   generatedNumber = '';
   createRandomNumber() {
@@ -46,7 +46,7 @@ const playerGuess = {
       this.comparisonResult = false;
     }
   },
-  checkAnswer() {
+  checkCorrectAnswer() {
     if (this.comparisonResult === true) {
       this.playerWon();
     }
@@ -57,7 +57,7 @@ const playerGuess = {
       this.createRandomNumber();
       this.userPrompt();
       if (this.checkIfNumber() === true) {
-        this.checkAnswer();
+        this.checkCorrectAnswer();
         this.isNumBiggerOrSmaller();
       }
     } else {
@@ -95,7 +95,7 @@ const gameState = {
     if (this.tries > 0) {
       this.userPrompt();
       if (this.checkIfNumber() === true) {
-        this.checkAnswer();
+        this.checkCorrectAnswer();
         this.isNumBiggerOrSmaller();
       }
     } else {
@@ -121,6 +121,6 @@ Object.setPrototypeOf(gameState, playerGuess);
 initial.createRandomNumber();
 playerGuess.userPrompt();
 if (gameState.checkIfNumber() === true) {
-  gameState.checkAnswer();
+  gameState.checkCorrectAnswer();
   gameState.isNumBiggerOrSmaller();
 }
