@@ -1,4 +1,4 @@
-/* eslint-disable*/
+// eslint-disable-next-line max-classes-per-file
 const readlineSync = require('readline-sync');
 
 class Tries {
@@ -9,18 +9,24 @@ class Initial {
   constructor(triesAmount) {
     this.tries = triesAmount.triesLeft;
   }
+
   generatedNumber = '';
+
   createRandomNumber() {
     const randomNumber = String(Math.floor(Math.random() * 10));
     this.generatedNumber = randomNumber;
     return randomNumber;
   }
+
   resetTries() {
     this.tries = 3;
   }
+
+  // eslint-disable-next-line class-methods-use-this
   log(message) {
     console.log(message);
   }
+
   messages = {
     numTooBig: 'Your number is too big!',
     numTooSmall: 'Your number is too small!',
